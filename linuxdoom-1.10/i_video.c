@@ -28,6 +28,7 @@ rcsid[] = "$Id: i_x.c,v 1.6 1997/02/03 22:45:10 b1 Exp $";
 #include <unistd.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#include "doomdef.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -46,7 +47,7 @@ int XShmGetEventBase( Display* dpy ); // problems with g++?
 #include <sys/socket.h>
 
 #include <netinet/in.h>
-#include <errnos.h>
+#include <errno.h>
 #include <signal.h>
 
 #include "doomstat.h"
@@ -87,7 +88,7 @@ int		doPointerWarp = POINTER_WARP_COUNTDOWN;
 // replace each 320x200 pixel with multiply*multiply pixels.
 // According to Dave Taylor, it still is a bonehead thing
 // to use ....
-static int	multiply=1;
+static int	multiply=SCREEN_MUL;
 
 
 //
@@ -666,9 +667,8 @@ void grabsharedmemory(int size)
       id = shmget((key_t)key, size, IPC_CREAT|0777);
       if (id==-1)
       {
-	extern int errno;
-	fprintf(stderr, "errno=%d\n", errno);
-	I_Error("Could not get any shared memory");
+		fprintf(stderr, "errno=%d\n", errno);
+		I_Error("Could not get any shared memory");
       }
       break;
     }
@@ -816,7 +816,7 @@ void I_InitGraphics(void)
 					X_visual,
 					attribmask,
 					&attribs );
-
+	XInstallColormap(X_display, X_cmap);
     XDefineCursor(X_display, X_mainWindow,
 		  createnullcursor( X_display, X_mainWindow ) );
 
