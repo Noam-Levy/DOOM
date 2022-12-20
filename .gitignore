@@ -1,0 +1,8 @@
+setup
+*.o
+doom.wad
+linuxdoom-1.10/CVS
+linuxdoom-1.10/HTML
+linuxdoom-1.10/linux
+linuxdoom-1.10/G*
+linuxdoom-1.10/*.log
